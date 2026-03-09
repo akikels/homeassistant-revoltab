@@ -10,9 +10,19 @@ async def async_setup_entry(hass, entry, async_add_entities):
 class RevoltabSwitch(SwitchEntity):
     def __init__(self, api, device):
         self._api = api
+        self._device_id = device.get("deviceId", "revoltab_default")
         self._attr_name = device.get("deviceName", "HIDE Device")
-        self._attr_unique_id = device.get("deviceId", "revoltab_default")
+        self._attr_unique_id = f"{self._device_id}_switch"
         self._attr_is_on = device.get("isOn") == 1
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._device_id)},
+            "name": self._attr_name,
+            "manufacturer": "Revoltab",
+            "model": "HIDE",
+        }
 
     async def async_turn_on(self, **kwargs):
         if await self._api.send_command("start"):
