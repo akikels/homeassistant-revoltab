@@ -1,4 +1,4 @@
-from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
@@ -18,7 +18,8 @@ class RevoltabFillLevel(CoordinatorEntity, SensorEntity):
 
     @property
     def native_value(self):
-        return self.coordinator.data.get("filllevel")
+        # Geändert von filllevel auf fillLevel (passend zum Screenshot)
+        return self.coordinator.data.get("fillLevel")
 
     @property
     def device_info(self):
