@@ -30,11 +30,11 @@ async def async_setup_entry(hass: HomeAssistant, entry):
         "coordinator": coordinator,
     }
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["switch", "number", "sensor", "binary_sensor"])
+    await hass.config_entries.async_forward_entry_setups(entry, ["switch", "select", "sensor", "binary_sensor"])
     return True
 
 async def async_unload_entry(hass, entry):
-    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, ["switch", "number", "sensor", "binary_sensor"])
+    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, ["switch", "select", "sensor", "binary_sensor"])
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
     return unload_ok

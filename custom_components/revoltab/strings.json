@@ -7,8 +7,21 @@
       }
     },
     "error": {
-      "invalid_auth": "Token ungültig (Check Bearer Auth)",
+      "invalid_auth": "Token ungültig",
       "cannot_connect": "Server nicht erreichbar"
+    }
+  },
+  "entity": {
+    "select": {
+      "intensity": {
+        "state": {
+          "Subtle": "Dezent",
+          "Gentle": "Sanft",
+          "Moderate": "Mittel",
+          "Strong": "Stark",
+          "Intense": "Intensiv"
+        }
+      }
     }
   }
 }
