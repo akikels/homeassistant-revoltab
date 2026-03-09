@@ -6,7 +6,7 @@ from .api import RevoltabAPI
 from .const import DOMAIN, CONF_API_KEY
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = 10 
+SCAN_INTERVAL = 5
 
 async def async_setup_entry(hass: HomeAssistant, entry):
     api = RevoltabAPI(entry.data[CONF_API_KEY])
