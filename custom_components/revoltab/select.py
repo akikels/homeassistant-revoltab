@@ -2,7 +2,6 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
-# Mapping: Display Name -> API Threshold
 INTENSITY_STEPS = {
     "Subtle": 0,
     "Gentle": 25,
@@ -24,11 +23,10 @@ class RevoltabIntensitySelect(CoordinatorEntity, SelectEntity):
         self._attr_name = "Intensity"
         self._attr_unique_id = f"{self._device_id}_intensity_select"
         self._attr_options = list(INTENSITY_STEPS.keys())
-        self._attr_icon = "mdi:flower-tulip" # Passendes Icon für Düfte
+        self._attr_icon = "mdi:flower-tulip"
 
     @property
     def current_option(self):
-        """Calculates the current option based on the API value."""
         val = self.coordinator.data.get("intensity", 0)
         if val >= 100: return "Intense"
         if val >= 75: return "Strong"
@@ -46,8 +44,6 @@ class RevoltabIntensitySelect(CoordinatorEntity, SelectEntity):
         }
 
     async def async_select_option(self, option: str) -> None:
-        """Sends the exact threshold value to the API."""
         api_value = INTENSITY_STEPS.get(option, 0)
         if await self._api.set_intensity(api_value):
-            # Immediate refresh to show the new state
             await self.coordinator.async_request_refresh()
