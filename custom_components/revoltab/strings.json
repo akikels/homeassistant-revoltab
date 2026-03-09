@@ -2,16 +2,13 @@
   "config": {
     "step": {
       "user": {
-        "title": "Revoltab HIDE Einrichtung",
-        "description": "Um deine Geräte zu steuern, benötigst du einen API-Key.\n\n1. Gehe auf [backend.revoltab.com/loxone/](https://backend.revoltab.com/loxone/).\n2. Melde dich mit deinen Revoltab-Zugangsdaten an.\n3. Klicke auf **'Generate Key'**.\n4. Kopiere den Key und füge ihn unten ein.",
-        "data": {
-          "api_key": "Dein API-Key"
-        }
+        "title": "Revoltab HIDE",
+        "data": { "api_key": "Bearer Token" }
       }
     },
     "error": {
-      "invalid_auth": "Der API-Key ist ungültig oder die Anmeldung ist fehlgeschlagen.",
-      "cannot_connect": "Verbindung zum Revoltab-Server nicht möglich."
+      "invalid_auth": "Token ungültig (Check Bearer Auth)",
+      "cannot_connect": "Server nicht erreichbar"
     }
   }
 }
