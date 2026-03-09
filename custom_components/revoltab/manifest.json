@@ -5,6 +5,6 @@
   "config_flow": true,
   "documentation": "https://github.com/akikels/homeassistant-revoltab",
   "iot_class": "cloud_polling",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "requirements": []
 }
