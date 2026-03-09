@@ -3,9 +3,9 @@
     "step": {
       "user": {
         "title": "Revoltab HIDE Setup",
-        "description": "Please enter your API Token from the Revoltab portal.",
+        "description": "Please enter your Bearer Token from the Revoltab portal.",
         "data": {
-          "api_key": "API Token"
+          "api_key": "Bearer Token"
         }
       }
     },
