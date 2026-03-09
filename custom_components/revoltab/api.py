@@ -22,3 +22,15 @@ class RevoltabAPI:
         async with aiohttp.ClientSession() as session:
             async with session.post(f"{self.base_url}/{endpoint}", headers=self.headers) as resp:
                 return resp.status == 200
+
+    async def set_intensity(self, value):
+        """Setzt die Intensität (0-100) laut Screenshot."""
+        # Laut Swagger Bild wird x-www-form-urlencoded mit 'value=X' erwartet
+        data = {"value": str(value)}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{self.base_url}/setintensity", 
+                headers=self.headers, 
+                data=data
+            ) as resp:
+                return resp.status == 200
