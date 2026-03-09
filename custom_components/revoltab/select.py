@@ -3,11 +3,13 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
 INTENSITY_STEPS = {
-    "Subtle": 0,
-    "Gentle": 25,
-    "Moderate": 50,
-    "Strong": 75,
-    "Intense": 100
+    "Subtle": 30,
+    "Relaxed": 40,
+    "Balanced": 50,
+    "Moderate": 60,
+    "Pleasant": 70,
+    "Strong": 80,
+    "Intense": 90
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -29,11 +31,11 @@ class RevoltabIntensitySelect(CoordinatorEntity, SelectEntity):
 
     @property
     def current_option(self):
-        val = self.coordinator.data.get("intensity", 0)
-        if val >= 100: return "Intense"
-        if val >= 75: return "Strong"
-        if val >= 50: return "Moderate"
-        if val >= 25: return "Gentle"
+        val = self.coordinator.data.get("intensity", 30)
+        # Findet den nächsten passenden Namen zum API-Wert
+        for name, api_val in reversed(INTENSITY_STEPS.items()):
+            if val >= api_val:
+                return name
         return "Subtle"
 
     @property
@@ -46,6 +48,6 @@ class RevoltabIntensitySelect(CoordinatorEntity, SelectEntity):
         }
 
     async def async_select_option(self, option: str) -> None:
-        api_value = INTENSITY_STEPS.get(option, 0)
+        api_value = INTENSITY_STEPS.get(option, 30)
         if await self._api.set_intensity(api_value):
             await self.coordinator.async_request_refresh()

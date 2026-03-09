@@ -2,7 +2,8 @@ from homeassistant.components.number import NumberEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
-STEP_TO_API = {1: 0, 2: 25, 3: 50, 4: 75, 5: 100}
+# Mapping von Stufe 1-7 zu API-Wert
+STEP_TO_API = {1: 30, 2: 40, 3: 50, 4: 60, 5: 70, 6: 80, 7: 90}
 
 async def async_setup_entry(hass, entry, async_add_entities):
     data = hass.data[DOMAIN][entry.entry_id]
@@ -19,17 +20,16 @@ class RevoltabIntensityNumber(CoordinatorEntity, NumberEntity):
         self._device_id = device.get("deviceId", "revoltab_default")
         self._attr_unique_id = f"{self._device_id}_intensity_number_steps"
         self._attr_native_min_value = 1
-        self._attr_native_max_value = 5
+        self._attr_native_max_value = 7
         self._attr_native_step = 1
         self._attr_icon = "mdi:gauge"
 
     @property
     def native_value(self):
-        val = self.coordinator.data.get("intensity", 0)
-        if val >= 100: return 5
-        if val >= 75: return 4
-        if val >= 50: return 3
-        if val >= 25: return 2
+        val = self.coordinator.data.get("intensity", 30)
+        for step, api_val in reversed(STEP_TO_API.items()):
+            if val >= api_val:
+                return step
         return 1
 
     @property
@@ -42,6 +42,6 @@ class RevoltabIntensityNumber(CoordinatorEntity, NumberEntity):
         }
 
     async def async_set_native_value(self, value: float) -> None:
-        api_value = STEP_TO_API.get(int(value), 0)
+        api_value = STEP_TO_API.get(int(value), 30)
         if await self._api.set_intensity(api_value):
             await self.coordinator.async_request_refresh()
