@@ -14,7 +14,7 @@ This custom integration allows you to control **Revoltab HIDE** devices (retract
 ### 1. Via HACS (Recommended)
 1. Open **HACS** in your Home Assistant instance.
 2. Click the three dots in the top right corner and select **Custom repositories**.
-3. Add the URL of this repository: `[https://github.com/akikels/homeassistant-revoltab](https://github.com/akikels/homeassistant-revoltab)`
+3. Add the URL of this repository: `[https://github.com/akikels/homeassistant-revoltab]`
 4. Select **Integration** as the category and click **Add**.
 5. Search for "Revoltab HIDE" and click **Download**.
 6. **Restart Home Assistant.**
