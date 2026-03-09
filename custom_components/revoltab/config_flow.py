@@ -1,25 +1,38 @@
 import voluptuous as vol
 from homeassistant import config_entries
 import aiohttp
+import logging
 from .const import DOMAIN, CONF_API_KEY
 
+_LOGGER = logging.getLogger(__name__)
+
 class RevoltabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Behandelt die Einrichtung über die Benutzeroberfläche."""
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
         errors = {}
         if user_input is not None:
-            # Hier prüfen wir kurz, ob der Key gültig ist
-            api_key = user_input[CONF_API_KEY]
-            is_valid = await self._test_api_key(api_key)
+            api_key = user_input[CONF_API_KEY].strip() # Leerzeichen entfernen
             
-            if is_valid:
-                return self.async_create_entry(title="Revoltab Cloud", data=user_input)
-            else:
-                errors["base"] = "invalid_auth"
+            # Teste die Verbindung
+            url = "https://backend.revoltab.com/api/v1/devices"
+            headers = {
+                "X-API-KEY": api_key,
+                "accept": "application/json"
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                try:
+                    async with session.get(url, headers=headers, timeout=10) as resp:
+                        if resp.status == 200:
+                            return self.async_create_entry(title="Revoltab", data={CONF_API_KEY: api_key})
+                        else:
+                            _LOGGER.error("Revoltab API Fehler: Status %s", resp.status)
+                            errors["base"] = "invalid_auth"
+                except Exception as e:
+                    _LOGGER.error("Revoltab Verbindung fehlgeschlagen: %s", e)
+                    errors["base"] = "cannot_connect"
 
-        # Das ist das Formular, das in HA erscheint
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema({
@@ -27,14 +40,3 @@ class RevoltabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }),
             errors=errors,
         )
-
-    async def _test_api_key(self, api_key):
-        """Testet den Key gegen die Revoltab API."""
-        url = "https://backend.revoltab.com/api/v1/devices"
-        headers = {"X-API-KEY": api_key}
-        async with aiohttp.ClientSession() as session:
-            try:
-                async with session.get(url, headers=headers, timeout=10) as resp:
-                    return resp.status == 200
-            except:
-                return False
