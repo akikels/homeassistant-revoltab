@@ -1,34 +1,36 @@
 from homeassistant.components.number import NumberEntity
-from .const import DOMAIN, CONF_API_KEY
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    from .api import RevoltabAPI
-    api = RevoltabAPI(entry.data[CONF_API_KEY])
-    devices = await api.get_devices()
-    async_add_entities([RevoltabIntensity(api, d) for d in devices])
+    data = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities([RevoltabIntensity(data["coordinator"], data["api"])])
 
-class RevoltabIntensity(NumberEntity):
-    def __init__(self, api, device):
+class RevoltabIntensity(CoordinatorEntity, NumberEntity):
+    def __init__(self, coordinator, api):
+        super().__init__(coordinator)
         self._api = api
+        device = coordinator.data
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._device_name = device.get("deviceName", "Schlafzimmer")
-        self._attr_name = "Intensity" 
+        self._attr_name = "Intensity"
         self._attr_unique_id = f"{self._device_id}_intensity"
         self._attr_native_min_value = 0
         self._attr_native_max_value = 100
         self._attr_native_step = 1
-        self._attr_native_value = float(device.get("intensity", 0))
+
+    @property
+    def native_value(self):
+        return float(self.coordinator.data.get("intensity", 0))
 
     @property
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": self._device_name,
+            "name": self.coordinator.data.get("deviceName", "HIDE"),
             "manufacturer": "Revoltab",
             "model": "HIDE",
         }
 
     async def async_set_native_value(self, value: float) -> None:
         if await self._api.set_intensity(int(value)):
-            self._attr_native_value = value
-            self.async_write_ha_state()
+            await self.coordinator.async_request_refresh()
