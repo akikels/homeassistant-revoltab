@@ -20,7 +20,9 @@ class RevoltabIntensity(CoordinatorEntity, NumberEntity):
 
     @property
     def native_value(self):
-        return float(self.coordinator.data.get("intensity", 0))
+        data = self.coordinator.data
+        val = data.get("intensity") if data.get("intensity") is not None else data.get("Intensity")
+        return float(val) if val is not None else 0.0
 
     @property
     def device_info(self):
