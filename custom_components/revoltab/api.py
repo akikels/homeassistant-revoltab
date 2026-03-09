@@ -1,25 +1,24 @@
 import aiohttp
 
 class RevoltabAPI:
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self, token):
+        self.token = token
         self.base_url = "https://backend.revoltab.com/api/v1"
-        self.headers = {
-            "X-API-KEY": self.api_key.strip(),
-            "accept": "application/json",
-            "Content-Type": "application/json"
-        }
+        self.headers = {"Authorization": f"Bearer {self.token}", "accept": "application/json"}
 
     async def get_devices(self):
+        """Holt Status (liefert laut Screenshot ein einzelnes Objekt oder Liste)."""
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{self.base_url}/devices", headers=self.headers) as resp:
+            async with session.get(f"{self.base_url}/devicestatus", headers=self.headers) as resp:
                 if resp.status == 200:
-                    return await resp.json()
+                    data = await resp.json()
+                    # Falls es nur ein Gerät ist, packen wir es in eine Liste
+                    return [data] if isinstance(data, dict) else data
                 return []
 
-    async def send_command(self, device_id, action):
-        # Swagger nutzt oft 'open' oder 'close' für HIDE Produkte
-        data = {"deviceId": device_id, "command": action}
+    async def send_command(self, action):
+        """Action ist 'start' oder 'stop'."""
+        endpoint = "startdevice" if action == "start" else "stopdevice"
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"{self.base_url}/commands", json=data, headers=self.headers) as resp:
-                return resp.status == 200 or resp.status == 201
+            async with session.post(f"{self.base_url}/{endpoint}", headers=self.headers) as resp:
+                return resp.status == 200
