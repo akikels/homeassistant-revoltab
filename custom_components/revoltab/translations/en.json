@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Revoltab HIDE",
+        "description": "1. Visit the integration portal: backend.revoltab.com/loxone/\n2. Log in using your official Revoltab App credentials.\n3. In the device overview, locate the 'Generate Key' button.\n4. Copy the generated string. This is your Bearer Token used for the setup.",
+        "data": {
+          "api_key": "Bearer Token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid token",
+      "cannot_connect": "Server unreachable"
+    }
+  },
+  "entity": {
+    "select": {
+      "intensity": {
+        "name": "Intensity",
+        "state": {
+          "Subtle": "Subtle",
+          "Relaxed": "Relaxed",
+          "Balanced": "Balanced",
+          "Moderate": "Moderate",
+          "Pleasant": "Pleasant",
+          "Strong": "Strong",
+          "Intense": "Intense"
+        }
+      }
+    },
+    "number": {
+      "intensity_level": {
+        "name": "Intensity Level"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Power"
+      }
+    },
+    "sensor": {
+      "fill_level": {
+        "name": "Fill Level"
+      }
+    },
+    "binary_sensor": {
+      "connectivity": {
+        "name": "Connectivity"
+      }
+    }
+  }
+}
