@@ -7,12 +7,14 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities([RevoltabSwitch(data["coordinator"], data["api"])])
 
 class RevoltabSwitch(CoordinatorEntity, SwitchEntity):
+    _attr_has_entity_name = True
+    _attr_name = "Power"
+
     def __init__(self, coordinator, api):
         super().__init__(coordinator)
         self._api = api
         device = coordinator.data
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._attr_name = "Power"
         self._attr_unique_id = f"{self._device_id}_switch"
 
     @property

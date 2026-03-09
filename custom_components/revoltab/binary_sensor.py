@@ -7,11 +7,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities([RevoltabOnlineStatus(data["coordinator"])])
 
 class RevoltabOnlineStatus(CoordinatorEntity, BinarySensorEntity):
+    _attr_has_entity_name = True
+    _attr_name = "Connectivity"
+    
     def __init__(self, coordinator):
         super().__init__(coordinator)
         device = coordinator.data
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._attr_name = "Connectivity"
         self._attr_unique_id = f"{self._device_id}_online"
         self._attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
 

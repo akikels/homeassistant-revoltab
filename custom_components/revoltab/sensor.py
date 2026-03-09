@@ -7,11 +7,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities([RevoltabFillLevel(data["coordinator"])])
 
 class RevoltabFillLevel(CoordinatorEntity, SensorEntity):
+    _attr_has_entity_name = True
+    _attr_name = "Fill Level"
+
     def __init__(self, coordinator):
         super().__init__(coordinator)
         device = coordinator.data
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._attr_name = "Fill Level"
         self._attr_unique_id = f"{self._device_id}_filllevel"
         self._attr_native_unit_of_measurement = "%"
         self._attr_icon = "mdi:water-percent"

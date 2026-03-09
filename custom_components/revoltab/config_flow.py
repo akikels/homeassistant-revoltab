@@ -10,7 +10,6 @@ class RevoltabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
         if user_input is not None:
             token = user_input[CONF_API_KEY].strip()
-            # Test gegen devicestatus (wie in deinem Screenshot)
             url = "https://backend.revoltab.com/api/v1/devicestatus"
             headers = {"Authorization": f"Bearer {token}", "accept": "application/json"}
             
