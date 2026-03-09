@@ -2,15 +2,13 @@
   "config": {
     "step": {
       "user": {
-        "title": "Revoltab HIDE Setup",
-        "data": {
-          "api_key": "Bearer Token"
-        }
+        "title": "Revoltab HIDE",
+        "data": { "api_key": "Bearer Token" }
       }
     },
     "error": {
-      "invalid_auth": "Invalid Token.",
-      "cannot_connect": "Connection error."
+      "invalid_auth": "Token ungültig (Check Bearer Auth)",
+      "cannot_connect": "Server nicht erreichbar"
     }
   }
 }
