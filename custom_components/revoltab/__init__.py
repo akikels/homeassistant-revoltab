@@ -9,11 +9,9 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = 10 
 
 async def async_setup_entry(hass: HomeAssistant, entry):
-    """Setzt die Revoltab Integration basierend auf einem Config Entry auf."""
     api = RevoltabAPI(entry.data[CONF_API_KEY])
 
     async def async_update_data():
-        """Zentrale Datenabfrage vom Revoltab Server."""
         return await api.get_device_status()
 
     coordinator = DataUpdateCoordinator(
@@ -35,15 +33,12 @@ async def async_setup_entry(hass: HomeAssistant, entry):
     await hass.config_entries.async_forward_entry_setups(
         entry, ["switch", "sensor", "binary_sensor", "select"]
     )
-    
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry):
-    """Entfernt die Integration und alle Entitäten sauber."""
     unload_ok = await hass.config_entries.async_forward_entry_unload(
         entry, ["switch", "sensor", "binary_sensor", "select"]
     )
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
-        
     return unload_ok
