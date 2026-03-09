@@ -1,37 +1,37 @@
 from homeassistant.components.switch import SwitchEntity
-from .api import RevoltabAPI
-from .const import DOMAIN, CONF_API_KEY
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    from .api import RevoltabAPI
-    api = RevoltabAPI(entry.data["api_key"])
-    devices = await api.get_devices()
-    async_add_entities([RevoltabSwitch(api, d) for d in devices])
+    data = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities([RevoltabSwitch(data["coordinator"], data["api"])])
 
-class RevoltabSwitch(SwitchEntity):
-    def __init__(self, api, device):
+class RevoltabSwitch(CoordinatorEntity, SwitchEntity):
+    def __init__(self, coordinator, api):
+        super().__init__(coordinator)
         self._api = api
+        device = coordinator.data
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._device_name = device.get("deviceName", "Schlafzimmer")
         self._attr_name = "Power"
         self._attr_unique_id = f"{self._device_id}_switch"
-        self._attr_is_on = device.get("isOn") == 1
+
+    @property
+    def is_on(self):
+        return self.coordinator.data.get("isOn") == 1
 
     @property
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": self._device_name,
+            "name": self.coordinator.data.get("deviceName", "HIDE"),
             "manufacturer": "Revoltab",
             "model": "HIDE",
         }
 
     async def async_turn_on(self, **kwargs):
         if await self._api.send_command("start"):
-            self._attr_is_on = True
-            self.async_write_ha_state()
+            await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs):
         if await self._api.send_command("stop"):
-            self._attr_is_on = False
-            self.async_write_ha_state()
+            await self.coordinator.async_request_refresh()
