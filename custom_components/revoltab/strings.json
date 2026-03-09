@@ -2,13 +2,29 @@
   "config": {
     "step": {
       "user": {
-        "title": "Revoltab HIDE",
-        "data": { "api_key": "Bearer Token" }
+        "title": "Revoltab HIDE Setup",
+        "description": "Please enter your API Token from the Revoltab portal.",
+        "data": {
+          "api_key": "API Token"
+        }
       }
     },
     "error": {
-      "invalid_auth": "Token ungültig (Check Bearer Auth)",
-      "cannot_connect": "Server nicht erreichbar"
+      "invalid_auth": "Invalid Token. Please check your credentials.",
+      "cannot_connect": "Could not connect to Revoltab server."
+    }
+  },
+  "entity": {
+    "select": {
+      "intensity": {
+        "state": {
+          "Subtle": "Dezent",
+          "Gentle": "Sanft",
+          "Moderate": "Mittel",
+          "Strong": "Stark",
+          "Intense": "Intensiv"
+        }
+      }
     }
   }
 }
