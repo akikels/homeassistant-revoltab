@@ -2,10 +2,9 @@
   "domain": "revoltab",
   "name": "Revoltab HIDE",
   "codeowners": ["@akikels"],
-  "dependencies": [],
+  "config_flow": true,
   "documentation": "https://github.com/akikels/homeassistant-revoltab",
   "iot_class": "cloud_polling",
-  "config_flow": true,
-  "version": "1.2.4",
+  "version": "1.2.5",
   "requirements": []
 }
