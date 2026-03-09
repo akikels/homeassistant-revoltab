@@ -3,7 +3,8 @@ from .api import RevoltabAPI
 from .const import DOMAIN, CONF_API_KEY
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    api = RevoltabAPI(entry.data[CONF_API_KEY])
+    from .api import RevoltabAPI
+    api = RevoltabAPI(entry.data["api_key"])
     devices = await api.get_devices()
     async_add_entities([RevoltabSwitch(api, d) for d in devices])
 
@@ -11,7 +12,8 @@ class RevoltabSwitch(SwitchEntity):
     def __init__(self, api, device):
         self._api = api
         self._device_id = device.get("deviceId", "revoltab_default")
-        self._attr_name = device.get("deviceName", "HIDE Device")
+        self._device_name = device.get("deviceName", "Schlafzimmer")
+        self._attr_name = "Power"
         self._attr_unique_id = f"{self._device_id}_switch"
         self._attr_is_on = device.get("isOn") == 1
 
@@ -19,7 +21,7 @@ class RevoltabSwitch(SwitchEntity):
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": self._attr_name,
+            "name": self._device_name,
             "manufacturer": "Revoltab",
             "model": "HIDE",
         }
