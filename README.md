@@ -1,11 +1,14 @@
 # Revoltab HIDE Integration for Home Assistant
 
-This custom integration allows you to control **Revoltab HIDE** devices (retractable sockets and connectors) directly from Home Assistant. Instead of manually adding REST commands to your `configuration.yaml` for every single device, this integration automatically discovers all devices linked to your account.
+This custom integration allows you to control and monitor **Revoltab HIDE** devices (retractable scent/power sockets) directly from Home Assistant. It utilizes the Revoltab Cloud API to provide seamless control and real-time status updates.
 
 ## ✨ Features
-* **Automatic Discovery**: Automatically finds all HIDE devices associated with your Revoltab account.
-* **Easy Setup**: Configuration via the Home Assistant user interface (Config Flow) – no YAML required.
-* **Switch Entities**: Control (extend/retract) your devices just like a standard switch.
+* **Power Control**: Turn your HIDE device on or off (Start/Stop).
+* **Intensity Adjustment**: Set the operation intensity (0-100%) via a slider.
+* **Fill Level Monitoring**: Track the remaining capacity (scent/liquid) in percent.
+* **Connectivity Status**: Monitor if your device is currently online or offline.
+* **Automatic Synchronization**: Status updates every 10 seconds (configurable) to match the Revoltab App.
+* **Device Grouping**: All entities (switch, slider, sensors) are grouped under a single "HIDE" device for a clean UI.
 
 ---
 
@@ -14,7 +17,7 @@ This custom integration allows you to control **Revoltab HIDE** devices (retract
 ### 1. Via HACS (Recommended)
 1. Open **HACS** in your Home Assistant instance.
 2. Click the three dots in the top right corner and select **Custom repositories**.
-3. Add the URL of this repository: `https://github.com/akikels/homeassistant-revoltab`
+3. Add the URL of this repository: `https://github.com/YOUR_USERNAME/YOUR_REPO_NAME`
 4. Select **Integration** as the category and click **Add**.
 5. Search for "Revoltab HIDE" and click **Download**.
 6. **Restart Home Assistant.**
@@ -26,14 +29,14 @@ This custom integration allows you to control **Revoltab HIDE** devices (retract
 
 ---
 
-## 🔑 How to get your API Key
+## 🔑 How to get your Bearer Token
 
-To use this integration, you need an API key from the Revoltab backend:
+To use this integration, you need an API Bearer Token from the Revoltab backend:
 
-1. Visit the dedicated integration page: [backend.revoltab.com/loxone/](https://backend.revoltab.com/loxone/).
+1. Visit the integration portal: [backend.revoltab.com/loxone/](https://backend.revoltab.com/loxone/)
 2. Log in using your official **Revoltab App credentials**.
 3. In the device overview, locate the **"Generate Key"** button.
-4. Copy the generated key. You will need to paste it into the Home Assistant setup window.
+4. Copy the generated string. This is your **Bearer Token** used for the setup.
 
 ---
 
@@ -42,19 +45,31 @@ To use this integration, you need an API key from the Revoltab backend:
 1. In Home Assistant, go to **Settings** > **Devices & Services**.
 2. Click **Add Integration**.
 3. Search for **Revoltab HIDE**.
-4. Enter the **API Key** you generated in the previous step.
-5. Your devices will automatically appear as new switch entities.
+4. Enter your **Bearer Token** in the setup window.
+5. Your device will automatically appear with all its sensors and controls.
+
+---
+
+## ℹ️ Important Technical Notes
+
+### Cloud-Based API
+This integration is **cloud-based**. It communicates with Revoltab's servers via the Internet. There is currently no local API available for these devices.
+
+### Polling Rate & Rate Limiting
+By default, the integration fetches data every **10 seconds**. This allows for quick updates if you change settings in the official Revoltab app. 
+* Changing the intensity or power state in Home Assistant triggers an **immediate** status refresh.
+* If you experience "Unavailable" states, you may be hitting a rate limit. In this case, increase the `SCAN_INTERVAL` in `__init__.py`.
 
 ---
 
 ## 🛠 Troubleshooting
 
 ### "Invalid Auth" Error
-* Ensure the key was copied correctly without trailing spaces.
-* Verify that you logged into the [Loxone sub-page](https://backend.revoltab.com/loxone/), as this is the specific portal for third-party system keys.
+* Ensure you copied the full token correctly.
+* Make sure you used the [Loxone Portal](https://backend.revoltab.com/loxone/) to generate the key, as standard app keys might not work with the API.
 
-### Integration not found in the list
-* If the integration does not appear after a restart, try clearing your browser cache (`Ctrl + F5` or `Cmd + Shift + R`).
+### Missing Entities
+* If the Intensity slider or Sensors do not appear, clear your browser cache (`Ctrl + F5`) and ensure you have updated to the latest version of this integration.
 
 ---
 
