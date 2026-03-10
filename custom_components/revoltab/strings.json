@@ -4,26 +4,58 @@
       "user": {
         "title": "Revoltab HIDE",
         "description": "1. Visit the integration portal: backend.revoltab.com/loxone/\n2. Log in using your official Revoltab App credentials.\n3. In the device overview, locate the 'Generate Key' button.\n4. Copy the generated string. This is your Bearer Token used for the setup.",
-        "data": { "api_key": "Bearer Token" }
+        "data": {
+          "api_key": "Bearer Token"
+        }
       }
     },
     "error": {
-      "invalid_auth": "Token ungültig",
-      "cannot_connect": "Server nicht erreichbar"
+      "invalid_auth": "Invalid token",
+      "cannot_connect": "Server unreachable"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
     }
   },
   "entity": {
     "select": {
       "intensity": {
+        "name": "Intensity",
         "state": {
-          "Subtle": "Dezent",
-          "Relaxed": "Entspannt",
-          "Balanced": "Ausgeglichen",
-          "Moderate": "Mittel",
-          "Pleasant": "Angenehm",
-          "Strong": "Stark",
-          "Intense": "Intensiv"
+          "Subtle": "Subtle",
+          "Relaxed": "Relaxed",
+          "Balanced": "Balanced",
+          "Moderate": "Moderate",
+          "Pleasant": "Pleasant",
+          "Strong": "Strong",
+          "Intense": "Intense"
         }
+      }
+    },
+    "number": {
+      "intensity_level": {
+        "name": "Intensity Level"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Power"
+      }
+    },
+    "sensor": {
+      "fill_level": {
+        "name": "Fill Level"
+      }
+    },
+    "binary_sensor": {
+      "connectivity": {
+        "name": "Connectivity"
       }
     }
   }

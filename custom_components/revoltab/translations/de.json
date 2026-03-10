@@ -14,6 +14,15 @@
       "cannot_connect": "Server nicht erreichbar"
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Aktualisierungsintervall (Sekunden)"
+        }
+      }
+    }
+  },
   "entity": {
     "select": {
       "intensity": {

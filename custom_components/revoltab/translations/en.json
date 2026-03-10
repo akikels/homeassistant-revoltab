@@ -14,6 +14,15 @@
       "cannot_connect": "Server unreachable"
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
+    }
+  },
   "entity": {
     "select": {
       "intensity": {
