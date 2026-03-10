@@ -32,7 +32,7 @@ class RevoltabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return RevoltabOptionsFlowHandler(config_entry)
+        return RevoltabOptionsFlowHandler()
 
 class RevoltabOptionsFlowHandler(config_entries.OptionsFlow):
 
