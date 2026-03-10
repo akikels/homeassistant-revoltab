@@ -56,7 +56,7 @@ To use this integration, you need an API Bearer Token from the Revoltab backend:
 This integration is **cloud-based**. It communicates with Revoltab's servers via the Internet. There is currently no local API available for these devices.
 
 ### Polling Rate & Rate Limiting
-By default, the integration fetches data every **10 seconds**. This allows for quick updates if you change settings in the official Revoltab app. 
+By default, the integration fetches data every **5 seconds**. This allows for quick updates if you change settings in the official Revoltab app. 
 * Changing the intensity or power state in Home Assistant triggers an **immediate** status refresh.
 * If you experience "Unavailable" states, you may be hitting a rate limit. In this case, increase the `SCAN_INTERVAL` in `__init__.py`.
 
